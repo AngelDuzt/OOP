@@ -1,0 +1,17 @@
+- hosts: pve1
+  gather_facts: false
+  tasks:
+	- name: Clone base VM to create a group of VMs
+	  community.general.proxmox_kvm:
+		api_user: ansible@pam
+		api_token_id: pve
+		api_token_secret: a84285e9-03b8-4b98-9f27-23e856e19b60
+		api_host: 192.168.89.11
+		node: pve1
+		newid: "{{ 1000 + item }}"
+		name: "group1-vm{{ item }}"
+		clone: "cloud-temp" # Имя шаблона Cloud-Init
+		full: true
+	loop: "{{ range(1, 4) }}"
+	vars:
+		group_id: 1
